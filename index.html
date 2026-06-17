@@ -4,17 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hola</title>
+    <title>Pokedex - Pokemón API</title>
+    <link rel="stylesheet" href="styles.css">
     <script type="module" src="app.js"></script>
+</head>
 
 <body>
-    <input type="text" id="pokemon-name">
-    <button id="btn-search">Buscar</button>
+    <header>
+        <h1>Pokédex</h1>
+    </header>
 
-    <h2 id="nombre"></h2>
-    <img id="imagen">
+    <main>
+        <section>
+            <h2>Buscar Pokémon</h2>
+            <input type="text" id="pokemon-name" placeholder="Ingrese un pokémon">
 
-    
+            <button id="btn-search">Buscar</button>
+
+            <article id="resultado">
+
+            </article>
+
+            <button id="btn-favorite">Guardar favorito</button>
+        </section>
+
+        <section>
+            <h2>Favoritos</h2>
+            <ul id="favoritos">
+
+            </ul>
+        </section>
+    </main>
 </body>
 
 </html>
