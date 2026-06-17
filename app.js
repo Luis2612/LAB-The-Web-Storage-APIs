@@ -1,6 +1,4 @@
 let pokemonActual = null;
-
-// Tarea 2.1: searchPokemon() (Buscar Pokémon)
 async function searchPokemon() {
     try {
         let pokemon = document.getElementById("pokemon-name").value.toLowerCase().trim();
@@ -25,14 +23,12 @@ async function searchPokemon() {
 
     } catch (error) {
         pokemonActual = null;
-        alert("Pokémon no encontrado."); // Requerimiento del lab: Mostrar alert si no existe
+        alert("Pokémon no encontrado.");
         document.getElementById("resultado").innerHTML = `
             <p>Pokémon no encontrado.</p>
         `;
     }
 }
-
-// Tarea 2.2: saveFavorite() (Guardar favorito)
 function saveFavorite() {
     if (!pokemonActual) {
         alert("Primero busca un Pokemon");
@@ -55,8 +51,6 @@ function saveFavorite() {
     }
     updateFavoritesList();
 }
-
-// Tarea 2.3: updateFavoritesList() (Actualizar lista de favoritos)
 function updateFavoritesList() {
     const favoritosDiv = document.getElementById('favoritos');
     favoritosDiv.innerHTML = '';
@@ -96,14 +90,8 @@ function updateFavoritesList() {
     });
 }
 
-// Configuración de eventos al cargar la página (Persona 2 - Juan Oviedo)
 document.addEventListener("DOMContentLoaded", function() {
-    // Escuchar el botón de buscar
     document.getElementById("btn-search").addEventListener("click", searchPokemon);
-    
-    // Escuchar el botón de favoritos
     document.getElementById("btn-favorite").addEventListener("click", saveFavorite);
-    
-    // Cargar la lista inicial de favoritos
     updateFavoritesList();
 });
