@@ -1,0 +1,18 @@
+Id de Favrotos en html
+
+id="favoritos"
+
+Css de Favortios en styles.css
+
+.favorite-card {
+}
+.favorite-image {
+}
+.favorite-name {
+}
+
+
+Clave de local.storage
+
+nombre: favoritos
+{ name: 'pikachu', image: 'url-de-la-imagen' }
