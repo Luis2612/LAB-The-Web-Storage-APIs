@@ -74,7 +74,7 @@ function updateFavoritesList() {
         return;
     }
     
-    listaFavoritos.forEach(function(pokemon) {
+    listaFavoritos.forEach(function(pokemon, index) {
         const pokemonCard = document.createElement('li');
         pokemonCard.className = 'favorite-card'; 
         
@@ -84,14 +84,39 @@ function updateFavoritesList() {
         pokemonCard.innerHTML = `
             <img src="${pokemonImage}" alt="${pokemonName}" class="favorite-image">
             <span class="favorite-name">${pokemonName}</span>
+            <button class="btn-remove" onclick="removeFavorite(${index})">Eliminar</button>
         `;
         
         favoritosDiv.appendChild(pokemonCard);
     });
 }
 
+function removeFavorite(index) {
+    const favoritosStr = localStorage.getItem('favoritos');
+    if (!favoritosStr) return;
+    
+    let favoritos = [];
+    try {
+        favoritos = JSON.parse(favoritosStr);
+    } catch (e) {
+        favoritos = [];
+    }
+    favoritos.splice(index, 1);
+    localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    updateFavoritesList();
+}
+
+function clearAllFavorites() {
+    localStorage.removeItem('favoritos');
+    updateFavoritesList();
+}
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("btn-search").addEventListener("click", searchPokemon);
     document.getElementById("btn-favorite").addEventListener("click", saveFavorite);
+    const btnClearAll = document.getElementById("btn-clear-all");
+    if (btnClearAll) {
+        btnClearAll.addEventListener("click", clearAllFavorites);
+    }
+    
     updateFavoritesList();
 });
