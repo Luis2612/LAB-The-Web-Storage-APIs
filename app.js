@@ -18,7 +18,7 @@ const favoritosDiv = document.getElementById('favoritos');
         return;
     }
     listaFavoritos.forEach(function(pokemon) {
-        const pokemonCard = document.createElement('div');
+        const pokemonCard = document.createElement('li');
         pokemonCard.className = 'favorite-card'; 
         const pokemonName = pokemon.name;
         const pokemonImage = pokemon.image || (pokemon.sprites && pokemon.sprites.front_default);
