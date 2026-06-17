@@ -1,41 +1,62 @@
-// Variable global para almacenar el Pokémon buscado actualmente
 let pokemonActual = null;
 
+// Tarea 2.1: searchPokemon() (Buscar Pokémon)
+async function searchPokemon() {
+    try {
+        let pokemon = document.getElementById("pokemon-name").value.toLowerCase().trim();
+        if (!pokemon) {
+            alert("Por favor, ingrese un pokémon.");
+            return;
+        }
+
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+
+        if (!response.ok) {
+            throw new Error("Pokémon no encontrado");
+        }
+        let data = await response.json();
+    
+        pokemonActual = data;
+
+        document.getElementById("resultado").innerHTML = `
+            <h3>${data.name.toUpperCase()}</h3>
+            <img src="${data.sprites.front_default}" alt="${data.name}">
+        `;
+
+    } catch (error) {
+        pokemonActual = null;
+        alert("Pokémon no encontrado."); // Requerimiento del lab: Mostrar alert si no existe
+        document.getElementById("resultado").innerHTML = `
+            <p>Pokémon no encontrado.</p>
+        `;
+    }
+}
+
+// Tarea 2.2: saveFavorite() (Guardar favorito)
 function saveFavorite() {
-    // verificar pokemonActual
     if (!pokemonActual) {
         alert("Primero busca un Pokemon");
         return;
     }
-
-    // obtener favoritos
     const favoritosGuardados = localStorage.getItem("favoritos");
-
-    // Convertir a array o crear uno vacío
     const favoritos = favoritosGuardados
         ? JSON.parse(favoritosGuardados)
         : [];
-
-    // verificar duplicados
+        
     const existe = favoritos.some(
         pokemon => pokemon.name === pokemonActual.name
     );
-    
-    // agregar pokemon
     if (!existe) {
         favoritos.push(pokemonActual);
-
-        // guardar
         localStorage.setItem(
             "favoritos",
             JSON.stringify(favoritos)
         );
     }
-
-    // actualizar lista
     updateFavoritesList();
 }
 
+// Tarea 2.3: updateFavoritesList() (Actualizar lista de favoritos)
 function updateFavoritesList() {
     const favoritosDiv = document.getElementById('favoritos');
     favoritosDiv.innerHTML = '';
@@ -75,6 +96,14 @@ function updateFavoritesList() {
     });
 }
 
+// Configuración de eventos al cargar la página (Persona 2 - Juan Oviedo)
 document.addEventListener("DOMContentLoaded", function() {
+    // Escuchar el botón de buscar
+    document.getElementById("btn-search").addEventListener("click", searchPokemon);
+    
+    // Escuchar el botón de favoritos
+    document.getElementById("btn-favorite").addEventListener("click", saveFavorite);
+    
+    // Cargar la lista inicial de favoritos
     updateFavoritesList();
 });
