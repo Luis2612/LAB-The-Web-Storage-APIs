@@ -1,19 +1,21 @@
-// Variable global para almacenar el Pokémon buscado actualmente
 let pokemonActual = null;
 
-// Tarea de Daniel Casas (Persona 3): Buscar Pokémon
-document.getElementById("btn-search").addEventListener("click", async function () {
+// Tarea 2.1: searchPokemon() (Buscar Pokémon)
+async function searchPokemon() {
     try {
-        let pokemon = document.getElementById("pokemon-name").value.toLowerCase();
+        let pokemon = document.getElementById("pokemon-name").value.toLowerCase().trim();
+        if (!pokemon) {
+            alert("Por favor, ingrese un pokémon.");
+            return;
+        }
+
         let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
 
         if (!response.ok) {
             throw new Error("Pokémon no encontrado");
         }
-
         let data = await response.json();
-        
-        // Guardar los datos en la variable global para que Alexandra y Luis puedan usarlos
+    
         pokemonActual = data;
 
         document.getElementById("resultado").innerHTML = `
@@ -22,51 +24,39 @@ document.getElementById("btn-search").addEventListener("click", async function (
         `;
 
     } catch (error) {
-        // En caso de error, limpiar la variable global y mostrar mensaje
         pokemonActual = null;
+        alert("Pokémon no encontrado."); // Requerimiento del lab: Mostrar alert si no existe
         document.getElementById("resultado").innerHTML = `
             <p>Pokémon no encontrado.</p>
         `;
     }
-});
+}
 
-// Tarea de Alexandra Castro (Persona 4): Guardar favorito
+// Tarea 2.2: saveFavorite() (Guardar favorito)
 function saveFavorite() {
-    // verificar pokemonActual
     if (!pokemonActual) {
         alert("Primero busca un Pokemon");
         return;
     }
-
-    // obtener favoritos
     const favoritosGuardados = localStorage.getItem("favoritos");
-
-    // Convertir a array o crear uno vacío
     const favoritos = favoritosGuardados
         ? JSON.parse(favoritosGuardados)
         : [];
-
-    // verificar duplicados
+        
     const existe = favoritos.some(
         pokemon => pokemon.name === pokemonActual.name
     );
-    
-    // agregar pokemon
     if (!existe) {
         favoritos.push(pokemonActual);
-
-        // guardar
         localStorage.setItem(
             "favoritos",
             JSON.stringify(favoritos)
         );
     }
-
-    // actualizar lista
     updateFavoritesList();
 }
 
-// Tarea de Luis Imbachi (Persona 5): Mostrar favoritos
+// Tarea 2.3: updateFavoritesList() (Actualizar lista de favoritos)
 function updateFavoritesList() {
     const favoritosDiv = document.getElementById('favoritos');
     favoritosDiv.innerHTML = '';
@@ -106,6 +96,14 @@ function updateFavoritesList() {
     });
 }
 
+// Configuración de eventos al cargar la página (Persona 2 - Juan Oviedo)
 document.addEventListener("DOMContentLoaded", function() {
+    // Escuchar el botón de buscar
+    document.getElementById("btn-search").addEventListener("click", searchPokemon);
+    
+    // Escuchar el botón de favoritos
+    document.getElementById("btn-favorite").addEventListener("click", saveFavorite);
+    
+    // Cargar la lista inicial de favoritos
     updateFavoritesList();
 });
