@@ -1,6 +1,36 @@
 // Variable global para almacenar el Pokémon buscado actualmente
 let pokemonActual = null;
 
+// Tarea de Daniel Casas (Persona 3): Buscar Pokémon
+document.getElementById("btn-search").addEventListener("click", async function () {
+    try {
+        let pokemon = document.getElementById("pokemon-name").value.toLowerCase();
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+
+        if (!response.ok) {
+            throw new Error("Pokémon no encontrado");
+        }
+
+        let data = await response.json();
+        
+        // Guardar los datos en la variable global para que Alexandra y Luis puedan usarlos
+        pokemonActual = data;
+
+        document.getElementById("resultado").innerHTML = `
+            <h3>${data.name.toUpperCase()}</h3>
+            <img src="${data.sprites.front_default}" alt="${data.name}">
+        `;
+
+    } catch (error) {
+        // En caso de error, limpiar la variable global y mostrar mensaje
+        pokemonActual = null;
+        document.getElementById("resultado").innerHTML = `
+            <p>Pokémon no encontrado.</p>
+        `;
+    }
+});
+
+// Tarea de Alexandra Castro (Persona 4): Guardar favorito
 function saveFavorite() {
     // verificar pokemonActual
     if (!pokemonActual) {
@@ -36,6 +66,7 @@ function saveFavorite() {
     updateFavoritesList();
 }
 
+// Tarea de Luis Imbachi (Persona 5): Mostrar favoritos
 function updateFavoritesList() {
     const favoritosDiv = document.getElementById('favoritos');
     favoritosDiv.innerHTML = '';
